@@ -1,11 +1,11 @@
 // console.log("yooo bish");
 
-function getHumanChoice() {
-    let choice = prompt("Rock, Paper or Scissors?").trim();
-    choice = choice.charAt(0).toUpperCase() + choice.slice(1).toLowerCase();
-    console.log(`You chose ${choice}.`);
-    return choice;
-}
+// function getHumanChoice() {
+//     let choice = prompt("Rock, Paper or Scissors?").trim();
+//     choice = choice.charAt(0).toUpperCase() + choice.slice(1).toLowerCase();
+//     console.log(`You chose ${choice}.`);
+//     return choice;
+// }
 
 function getComputerChoice() {
     let num = Math.random()*3
@@ -15,51 +15,63 @@ function getComputerChoice() {
         "Scissors"
     );
 
-    console.log(`Computer chose ${choice}.`);
+    // console.log(`Computer chose ${choice}.`);
     return choice;
 }
 
 function playGame() {
     let humanScore = 0;
     let computerScore = 0;
+    let textDiv = document.querySelector(".hero-text");
+    let scoreboard = document.querySelector(".scoreboard");
+    document.querySelectorAll(".selection").forEach((button) => {
+            button.addEventListener('click', () => 
+                playRound(button.getAttribute('choice-name'),getComputerChoice())
+        )
+    });
+    document.querySelector(".reset").addEventListener("click",  () => {
+        scoreboard.textContent = "You: 0, Computer: 0";
+        humanScore = 0;
+        computerScore = 0;
+    })
 
     function playRound(humanChoice, computerChoice) {
+        
+        if (humanChoice === undefined || computerChoice == undefined)
+            return
+
+        textDiv.textContent = `You chose: ${humanChoice}\nComputer chose: ${computerChoice}`
         if (humanChoice === computerChoice) {
-            alert(`Draw, ${humanChoice} draws ${computerChoice}`);
+            textDiv.textContent += `\nDraw, ${humanChoice} draws ${computerChoice}`;
         } else if (
             humanChoice === "Scissors" && computerChoice === "Paper" ||
             humanChoice === "Paper" && computerChoice === "Rock" ||
             humanChoice === "Rock" && computerChoice === "Scissors"
         ) {
-            alert(`You Won, ${humanChoice} beats ${computerChoice}`);
+            textDiv.textContent += `\nYou Won, ${humanChoice} beats ${computerChoice}`;
             humanScore += 1;
         } else {
-            alert(`You Lost, ${computerChoice} beats ${humanChoice}`);
+            textDiv.textContent += `\nYou Lost, ${computerChoice} beats ${humanChoice}`;
             computerScore += 1;
         }
+        scoreboard.textContent = `You: ${humanScore}, Computer: ${computerScore}`;
     }
+    
+    // let result_string = ""
+    // if (humanScore > computerScore) {
+        //     result_string = "YOU WON!";
+        // } else if (computerScore > humanScore) {
+            //     result_string = "YOU LOST :(";
+            // } else {
+                //     result_string = "DRAW :|";
+                // }
 
-    for (let i = 0; i < 5; i++) {
-        let humanChoice = getHumanChoice();
-        let computerChoice = getComputerChoice();
-        playRound(humanChoice, computerChoice);
-    }
-
-    let result_string = ""
-    if (humanScore > computerScore) {
-        result_string = "YOU WON!";
-    } else if (computerScore > humanScore) {
-        result_string = "YOU LOST :(";
-    } else {
-        result_string = "DRAW :|";
-    }
-
-    alert(
-        `Scores:
-        You: ${humanScore}
-        Computer: ${computerScore}
-        ${result_string}`
-    )
+    // alert(
+    //     `Scores:
+    //     You: ${humanScore}
+    //     Computer: ${computerScore}
+    //     ${result_string}`
+    // )
 }
 
 playGame()
